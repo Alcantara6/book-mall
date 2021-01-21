@@ -4,6 +4,9 @@ import com.yanjing.entity.Book;
 import com.yanjing.exception.BookAddFailException;
 import com.yanjing.exception.BookNotFoundException;
 import com.yanjing.service.BookService;
+import com.yanjing.util.response.Response;
+import com.yanjing.util.response.ResponseStatus;
+import com.yanjing.util.response.ResponseUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,45 +27,54 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping("/books")
-    public Page<Book> findAllBooksByPage(@RequestParam(defaultValue = "0") Integer pageNo) {
-        return bookService.findAllByPage(pageNo);
+    public Response<Page<Book>> findAllBooksByPage(@RequestParam(defaultValue = "0") Integer pageNo) {
+        Page<Book> books = bookService.findAllByPage(pageNo);
+        return ResponseUtils.success(books);
     }
 
     @GetMapping("/books/{id}")
-    public Book getBookById(@PathVariable("id") @Min(1) Integer id) {
-        return bookService.findById(id).orElseThrow(() -> new BookNotFoundException("没有找到id为" + id + "的图书！"));
+    public Response<Book> getBookById(@PathVariable("id") @Min(1) Integer id) {
+        Book book = bookService.findById(id).orElseThrow(() -> new BookNotFoundException("没有找到id为" + id + "的图书！"));
+        return ResponseUtils.success(book);
     }
 
     @GetMapping("/findByName")
-    public Page<Book> findBookByName(@Valid @RequestParam("name") String name, @RequestParam(defaultValue = "0") Integer pageNo) {
-        return bookService.findAllByName(name, pageNo);
+    public Response<Page<Book>> findBookByName(@Valid @RequestParam("name") String name, @RequestParam(defaultValue = "0") Integer pageNo) {
+        Page<Book> books = bookService.findAllByName(name, pageNo);
+        return ResponseUtils.success(books);
     }
 
     @GetMapping("/findByIsbn")
-    public Page<Book> findBookByIsbn(@Valid @RequestParam("isbn") String isbn, @RequestParam(defaultValue = "0") Integer pageNo) {
-        return bookService.findAllByIsbn(isbn, pageNo);
+    public Response<Page<Book>> findBookByIsbn(@Valid @RequestParam("isbn") String isbn, @RequestParam(defaultValue = "0") Integer pageNo) {
+        Page<Book> books = bookService.findAllByIsbn(isbn, pageNo);
+        return ResponseUtils.success(books);
     }
 
     @PostMapping("/books")
-    public Book addBook(@Valid @RequestBody Book book) {
-       return Optional.of(bookService.save(book)).orElseThrow(() -> new BookAddFailException("图书添加失败！"));
+    public Response<Book> addBook(@Valid @RequestBody Book book) {
+        Book addedBook = bookService.save(book).orElse(null);
+        if (null == addedBook) {
+            return ResponseUtils.fail(ResponseStatus.BAD_REQUEST, "图书添加失败");
+        }
+        return ResponseUtils.success(addedBook);
     }
 
     @PutMapping("/books/{id}")
-    public Book updateBook(@PathVariable @Min(1) Integer id, @Valid @RequestBody Book newBook) {
+    public Response<Book> updateBook(@PathVariable @Min(1) Integer id, @Valid @RequestBody Book newBook) {
         Book book = bookService.findById(id).orElseThrow(() -> new BookNotFoundException("没有找到id为" + id + "的图书！"));
         if (null != book) {
             BeanUtils.copyProperties(newBook, book);
             book.setId(id);
             bookService.save(book);
+            return ResponseUtils.success(book);
         }
-        return book;
+        return ResponseUtils.fail(ResponseStatus.NOT_FOUND, "没有找到id为" + id + "的图书！");
     }
 
     @DeleteMapping("books/{id}")
-    public String removeBook(@PathVariable @Min(1) Integer id) {
+    public Response removeBook(@PathVariable @Min(1) Integer id) {
         Book book = bookService.findById(id).orElseThrow(() -> new BookNotFoundException("没有找到id为" + id + "的图书！"));
         bookService.removeById(book.getId());
-        return "id为" + id + "的图书已被移除";
+        return ResponseUtils.success("id为" + id + "的图书已被移除");
     }
 }

@@ -26,7 +26,7 @@ public class BookServiceImpl implements BookService {
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
         Pageable pageable = PageRequest.of(pageNo, PAGE_SIZE, sort);
         return bookRepository.findAll(pageable);
-    };
+    }
 
     @Override
     public Optional<Book> findById(Integer id) {
@@ -53,13 +53,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book save(Book book) {
-        System.out.println(findByIsbn(book.getIsbn()));
-        if (findByIsbn(book.getIsbn()) == null) {
-            return bookRepository.saveAndFlush(book);
+    public Optional<Book> save(Book book) {
+        if (!findByIsbn(book.getIsbn()).isPresent()) {
+            return Optional.of(bookRepository.saveAndFlush(book));
         }
-        // TODO: 返回400 Response
-        return null;
+        return Optional.empty();
     }
 
     @Override

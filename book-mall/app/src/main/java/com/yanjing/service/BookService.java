@@ -12,7 +12,7 @@ public interface BookService {
     Page<Book> findAllByIsbn(String isbn, Integer pageNo);
     Optional<Book> findByIsbn(String isbn);
 
-    Book save(Book book);
+    Optional<Book> save(Book book);
 
     void removeById(Integer id);
 }
