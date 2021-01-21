@@ -1,15 +1,15 @@
 package com.yanjing.service;
 
 import com.yanjing.entity.Book;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface BookService {
-    List<Book> findAllBooks();
+    Page<Book> findAllByPage(Integer pageNo);
     Optional<Book> findById(Integer id);
-    Optional<Book> findByIsbn(String isbn);
+    Page<Book> findAllByName(String name, Integer pageNo);
+    Page<Book> findAllByIsbn(String isbn, Integer pageNo);
 
     Book save(Book book);
 

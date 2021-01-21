@@ -5,6 +5,7 @@ import com.yanjing.exception.BookNotFoundException;
 import com.yanjing.service.BookService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -18,18 +19,23 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping("/books")
-    public List<Book> findAllBooks() {
-        return bookService.findAllBooks();
+    public Page<Book> findAllBooksByPage(@RequestParam(defaultValue = "0") Integer pageNo) {
+        return bookService.findAllByPage(pageNo);
     }
 
     @GetMapping("/books/{id}")
-    public Book findBookById(@PathVariable("id") @Min(1) Integer id) {
+    public Book getBookById(@PathVariable("id") @Min(1) Integer id) {
         return bookService.findById(id).orElseThrow(() -> new BookNotFoundException("没有找到id为" + id + "的图书！"));
     }
 
-    @GetMapping("/book")
-    public Book findBookByIsbn(@Valid @RequestParam("isbn") String isbn) {
-        return bookService.findByIsbn(isbn).orElseThrow(() -> new BookNotFoundException("国际标准书号为" + isbn + "的图书！"));
+    @GetMapping("/findByName")
+    public Page<Book> findBookByName(@Valid @RequestParam("name") String name, @RequestParam(defaultValue = "0") Integer pageNo) {
+        return bookService.findAllByName(name, pageNo);
+    }
+
+    @GetMapping("/findByIsbn")
+    public Page<Book> findBookByIsbn(@Valid @RequestParam("isbn") String isbn, @RequestParam(defaultValue = "0") Integer pageNo) {
+        return bookService.findAllByIsbn(isbn, pageNo);
     }
 
     @PostMapping("/books")
