@@ -10,6 +10,7 @@ public interface BookService {
     Optional<Book> findById(Integer id);
     Page<Book> findAllByName(String name, Integer pageNo);
     Page<Book> findAllByIsbn(String isbn, Integer pageNo);
+    Optional<Book> findByIsbn(String isbn);
 
     Book save(Book book);
 

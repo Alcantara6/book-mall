@@ -1,6 +1,7 @@
 package com.yanjing.controller;
 
 import com.yanjing.entity.Book;
+import com.yanjing.exception.BookAddFailException;
 import com.yanjing.exception.BookNotFoundException;
 import com.yanjing.service.BookService;
 import org.springframework.beans.BeanUtils;
@@ -10,8 +11,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import java.util.List;
+import java.util.Optional;
 
+/**
+ * @author yanjing
+ * @date 2021-01-20
+ */
 @RestController
 @RequestMapping("api")
 public class BookController {
@@ -40,7 +45,7 @@ public class BookController {
 
     @PostMapping("/books")
     public Book addBook(@Valid @RequestBody Book book) {
-        return bookService.save(book);
+       return Optional.of(bookService.save(book)).orElseThrow(() -> new BookAddFailException("图书添加失败！"));
     }
 
     @PutMapping("/books/{id}")

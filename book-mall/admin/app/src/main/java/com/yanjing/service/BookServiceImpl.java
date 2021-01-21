@@ -8,8 +8,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -36,6 +34,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public Optional<Book> findByIsbn(String isbn) {
+        return bookRepository.findByIsbn(isbn);
+    }
+
+    @Override
     public Page<Book> findAllByName(String name, Integer pageNo) {
         Sort sort = Sort.by(Sort.Direction.DESC, "name");
         Pageable pageable = PageRequest.of(pageNo, PAGE_SIZE, sort);
@@ -51,7 +54,12 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book save(Book book) {
-        return bookRepository.saveAndFlush(book);
+        System.out.println(findByIsbn(book.getIsbn()));
+        if (findByIsbn(book.getIsbn()) == null) {
+            return bookRepository.saveAndFlush(book);
+        }
+        // TODO: 返回400 Response
+        return null;
     }
 
     @Override
