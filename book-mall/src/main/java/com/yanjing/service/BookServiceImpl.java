@@ -19,7 +19,7 @@ public class BookServiceImpl implements BookService {
     @Autowired
     private BookRepository bookRepository;
 
-    private final Integer PAGE_SIZE = 2;
+    private final Integer PAGE_SIZE = 5;
 
     @Override
     public Page<Book> findAllByPage(Integer pageNo) {
