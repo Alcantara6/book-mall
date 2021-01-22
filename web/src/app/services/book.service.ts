@@ -1,14 +1,9 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { Book } from '../models/book.model';
-
-const HTTP_OPTIONS = {
-	headers: new HttpHeaders({
-		'Content-Type': 'application/json',
-	}),
-};
+import { Book, BookRequestParams } from '../models/book.model';
+import { BaseHttpService } from './base-http.service';
 
 @Injectable({
 	providedIn: 'root',
@@ -16,25 +11,29 @@ const HTTP_OPTIONS = {
 export class BookService {
 	private bookUrl = '/api';
 
-	constructor(private http: HttpClient) {}
+	constructor(private baseHttp: BaseHttpService) {}
 
-	getBooks() {
+	getBooks(pageNo: number, pageSize: number) {
+    const params: BookRequestParams = {
+      pageNo,
+      pageSize
+    }
 		const url = `${this.bookUrl}/books`;
-		return this.http.get(url);
+		return this.baseHttp.get(url, params);
 	}
 
 	addBook(book: Book) {
-		const url = `${this.bookUrl}/add`;
-		return this.http.post(url, book, HTTP_OPTIONS);
+		const url = `${this.bookUrl}/books`;
+		return this.baseHttp.post(url, book);
 	}
 
 	editBook(book: Book) {
-		const url = `${this.bookUrl}/edit`;
-		return this.http.put(url, book, HTTP_OPTIONS);
+		const url = `${this.bookUrl}/books/${book.id}`;
+		return this.baseHttp.putJson(url, book);
 	}
 
 	deleteBook(bookId: number): Observable<any> {
-		const url = `${this.bookUrl}/remove/${bookId}`;
-		return this.http.delete(url, HTTP_OPTIONS);
+		const url = `${this.bookUrl}/books/${bookId}`;
+		return this.baseHttp.delete(url);
 	}
 }

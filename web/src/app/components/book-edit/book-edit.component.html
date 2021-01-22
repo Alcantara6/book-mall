@@ -1,0 +1,59 @@
+<nz-modal
+	[(nzVisible)]="isVisible"
+  [nzTitle]="title"
+  [nzWidth]="800"
+	(nzOnCancel)="handleCancel()"
+  [nzOkLoading]="isOkLoading"
+  [nzFooter]="null"
+>
+	<form class="book-form" nz-form [formGroup]="bookForm" (ngSubmit)="submitForm()">
+		<nz-form-item>
+			<nz-form-label [nzSpan]="7" nzRequired>书名</nz-form-label>
+			<nz-form-control [nzSpan]="12">
+				<input nz-input formControlName="name" placeholder="请输入书名" />
+			</nz-form-control>
+		</nz-form-item>
+
+		<nz-form-item>
+			<nz-form-label [nzSpan]="7" nzRequired>作者</nz-form-label>
+			<nz-form-control [nzSpan]="12">
+				<input nz-input formControlName="author" placeholder="请输入作者" />
+			</nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+			<nz-form-label [nzSpan]="7" nzRequired>ISBN</nz-form-label>
+			<nz-form-control [nzSpan]="12">
+				<input nz-input formControlName="isbn" placeholder="请输入ISBN编号" />
+			</nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+			<nz-form-label [nzSpan]="7" nzRequired>价格</nz-form-label>
+			<nz-form-control [nzSpan]="12">
+				<nz-input-number formControlName="price"></nz-input-number>
+			</nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+			<nz-form-label [nzSpan]="7" nzRequired>出版时间</nz-form-label>
+			<nz-form-control [nzSpan]="12">
+				<input nz-input formControlName="publishDate" placeholder="请输入出版时间" />
+			</nz-form-control>
+    </nz-form-item>
+
+		<nz-form-item>
+			<nz-form-label [nzSpan]="7" nzRequired>摘要</nz-form-label>
+			<nz-form-control [nzSpan]="12">
+				<textarea formControlName="bookAbstract" nz-input rows="4" placeholder="请输入摘要"></textarea>
+			</nz-form-control>
+		</nz-form-item>
+
+		<nz-form-item>
+			<nz-form-control [nzOffset]="7" [nzSpan]="12">
+				<button nz-button nzType="primary" [disabled]="!bookForm.valid">提交</button>
+				<button nz-button (click)="resetForm()">重置</button>
+			</nz-form-control>
+		</nz-form-item>
+	</form>
+</nz-modal>

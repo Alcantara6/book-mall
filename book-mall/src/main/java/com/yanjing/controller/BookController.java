@@ -1,6 +1,7 @@
 package com.yanjing.controller;
 
 import com.yanjing.entity.Book;
+import com.yanjing.exception.BookAddFailException;
 import com.yanjing.exception.BookNotFoundException;
 import com.yanjing.service.BookService;
 import com.yanjing.util.response.Response;
@@ -24,9 +25,14 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
+    private final String PAGE_SIZE = "100";
+
     @GetMapping("/books")
-    public Response<Page<Book>> findAllBooksByPage(@RequestParam(defaultValue = "0") Integer pageNo) {
-        Page<Book> books = bookService.findAllByPage(pageNo);
+    public Response<Page<Book>> findAllBooksByPage(
+            @RequestParam(defaultValue = "0") Integer pageNo,
+            @RequestParam(defaultValue = PAGE_SIZE) Integer pageSize
+    ) {
+        Page<Book> books = bookService.findAllByPage(pageNo, pageSize);
         return ResponseUtils.success(books);
     }
 
@@ -37,14 +43,22 @@ public class BookController {
     }
 
     @GetMapping("/findByName")
-    public Response<Page<Book>> findBookByName(@Valid @RequestParam("name") String name, @RequestParam(defaultValue = "0") Integer pageNo) {
-        Page<Book> books = bookService.findAllByName(name, pageNo);
+    public Response<Page<Book>> findBookByName(
+            @Valid @RequestParam("name") String name,
+            @RequestParam(defaultValue = "0") Integer pageNo,
+            @RequestParam(defaultValue = PAGE_SIZE) Integer pageSize
+    ) {
+        Page<Book> books = bookService.findAllByName(name, pageNo, pageSize);
         return ResponseUtils.success(books);
     }
 
     @GetMapping("/findByIsbn")
-    public Response<Page<Book>> findBookByIsbn(@Valid @RequestParam("isbn") String isbn, @RequestParam(defaultValue = "0") Integer pageNo) {
-        Page<Book> books = bookService.findAllByIsbn(isbn, pageNo);
+    public Response<Page<Book>> findBookByIsbn(
+            @Valid @RequestParam("isbn") String isbn,
+            @RequestParam(defaultValue = "0") Integer pageNo,
+            @RequestParam(defaultValue = PAGE_SIZE) Integer pageSize
+    ) {
+        Page<Book> books = bookService.findAllByIsbn(isbn, pageNo, pageSize);
         return ResponseUtils.success(books);
     }
 
@@ -63,8 +77,11 @@ public class BookController {
         if (null != book) {
             BeanUtils.copyProperties(newBook, book);
             book.setId(id);
-            bookService.save(book);
-            return ResponseUtils.success(book);
+            Book updatedBook = bookService.save(book).orElseThrow(() -> new BookAddFailException("更新图书失败"));
+            if (null != updatedBook) {
+                return ResponseUtils.success(book);
+            }
+            return ResponseUtils.fail(ResponseStatus.BAD_REQUEST, "更新图书失败");
         }
         return ResponseUtils.fail(ResponseStatus.NOT_FOUND, "没有找到id为" + id + "的图书！");
     }

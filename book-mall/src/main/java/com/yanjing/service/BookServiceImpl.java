@@ -19,12 +19,10 @@ public class BookServiceImpl implements BookService {
     @Autowired
     private BookRepository bookRepository;
 
-    private final Integer PAGE_SIZE = 5;
-
     @Override
-    public Page<Book> findAllByPage(Integer pageNo) {
+    public Page<Book> findAllByPage(Integer pageNo, Integer pageSize) {
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
-        Pageable pageable = PageRequest.of(pageNo, PAGE_SIZE, sort);
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
         return bookRepository.findAll(pageable);
     }
 
@@ -39,22 +37,23 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Page<Book> findAllByName(String name, Integer pageNo) {
+    public Page<Book> findAllByName(String name, Integer pageNo, Integer pageSize) {
         Sort sort = Sort.by(Sort.Direction.DESC, "name");
-        Pageable pageable = PageRequest.of(pageNo, PAGE_SIZE, sort);
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
         return bookRepository.findAllByNameLike('%' + name + '%', pageable);
     }
 
     @Override
-    public Page<Book> findAllByIsbn(String isbn, Integer pageNo) {
+    public Page<Book> findAllByIsbn(String isbn, Integer pageNo, Integer pageSize) {
         Sort sort = Sort.by(Sort.Direction.DESC, "isbn");
-        Pageable pageable = PageRequest.of(pageNo, PAGE_SIZE, sort);
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
         return bookRepository.findAllByIsbn(isbn, pageable);
     }
 
     @Override
     public Optional<Book> save(Book book) {
-        if (!findByIsbn(book.getIsbn()).isPresent()) {
+        Book sameIsbnBook = findByIsbn(book.getIsbn()).orElse(null);
+        if (sameIsbnBook == null || sameIsbnBook.getId() == book.getId()) {
             return Optional.of(bookRepository.saveAndFlush(book));
         }
         return Optional.empty();

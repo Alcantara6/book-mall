@@ -14,7 +14,9 @@ import { registerLocaleData } from '@angular/common';
 import zh from '@angular/common/locales/zh';
 import {
 	NzButtonModule,
+  NzFormModule,
 	NzIconModule,
+  NzInputNumberModule,
 	NzLayoutModule,
 	NzMessageModule,
 	NzModalModule,
@@ -35,11 +37,13 @@ registerLocaleData(zh);
 		HttpClientModule,
 		BrowserAnimationsModule,
 		NzLayoutModule,
-		NzTableModule,
+    NzTableModule,
+    NzFormModule,
 		NzButtonModule,
 		NzIconModule,
 		NzMessageModule,
-		NzModalModule,
+    NzModalModule,
+    NzInputNumberModule
 	],
 	providers: [{ provide: NZ_I18N, useValue: zh_CN }, INTERCEPTORS],
 	bootstrap: [AppComponent],

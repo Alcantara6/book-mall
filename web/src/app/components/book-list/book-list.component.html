@@ -8,7 +8,7 @@
 	[nzData]="books"
 	[nzFrontPagination]="false"
 	[nzTotal]="totalCount"
-	[(nzPageIndex)]="pageIndex"
+	[(nzPageIndex)]="pageNo"
 	[(nzPageSize)]="pageSize"
 	(nzPageIndexChange)="getBooks()"
 >
@@ -46,3 +46,11 @@
 		</tr>
 	</tbody>
 </nz-table>
+
+<app-book-edit
+	[title]="modalTitle"
+	[book]="currBook"
+	[isVisible]="isShowModal"
+	(confirm)="confirm($event)"
+	(canceled)="isShowModal = false"
+></app-book-edit>

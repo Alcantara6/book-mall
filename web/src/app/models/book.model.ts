@@ -4,6 +4,12 @@ export interface Book {
 	name: string;
 	author: string;
 	isbn: string;
-	publishDate: String;
+	publishDate: string;
 	price: number;
+	bookAbstract: string;
+}
+
+export interface BookRequestParams {
+	pageNo: number;
+	pageSize: number;
 }
