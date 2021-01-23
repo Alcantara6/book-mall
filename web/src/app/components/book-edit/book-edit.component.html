@@ -36,6 +36,13 @@
     </nz-form-item>
 
     <nz-form-item>
+			<nz-form-label [nzSpan]="7" nzRequired>库存</nz-form-label>
+			<nz-form-control [nzSpan]="12">
+				<nz-input-number formControlName="stock"></nz-input-number>
+			</nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
 			<nz-form-label [nzSpan]="7" nzRequired>出版时间</nz-form-label>
 			<nz-form-control [nzSpan]="12">
 				<input nz-input formControlName="publishDate" placeholder="请输入出版时间" />

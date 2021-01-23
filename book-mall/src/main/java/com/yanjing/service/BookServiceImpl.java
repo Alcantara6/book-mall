@@ -1,5 +1,6 @@
 package com.yanjing.service;
 
+import com.yanjing.constants.BookStatus;
 import com.yanjing.entity.Book;
 import com.yanjing.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +58,15 @@ public class BookServiceImpl implements BookService {
             return Optional.of(bookRepository.saveAndFlush(book));
         }
         return Optional.empty();
+    }
+
+    @Override
+    public void toggleStatus(Book book) {
+        if (null != book) {
+            BookStatus toggledStatus = book.getStatus() == BookStatus.AVAILABLE ? BookStatus.OFF_SHELVES : BookStatus.AVAILABLE;
+            book.setStatus(toggledStatus);
+            bookRepository.saveAndFlush(book);
+        }
     }
 
     @Override

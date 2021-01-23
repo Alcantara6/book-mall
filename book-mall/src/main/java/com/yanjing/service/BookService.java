@@ -14,5 +14,7 @@ public interface BookService {
 
     Optional<Book> save(Book book);
 
+    void toggleStatus(Book book);
+
     void removeById(Integer id);
 }

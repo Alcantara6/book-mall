@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { BookStatus } from 'src/app/constants/book.constant';
 import { Book } from 'src/app/models/book.model';
 
 @Component({
@@ -31,15 +32,17 @@ export class BookEditComponent implements OnInit, OnChanges {
 	}
 
 	createForm() {
-		const { id, name, author, bookAbstract, isbn, price, publishDate } = this.book || {};
+		const { id, name, author, bookAbstract, isbn, stock, price, publishDate, status } = this.book || {};
 		this.bookForm = this.formBuilder.group({
 			id: [id || null, []],
 			name: [name || '', []],
 			author: [author || '', []],
 			bookAbstract: [bookAbstract || '', []],
 			isbn: [isbn || '', []],
+			stock: [stock || null, []],
 			price: [price || null, []],
 			publishDate: [publishDate || null, []],
+			status: [status || BookStatus.AVAILABLE, []],
 		});
 	}
 

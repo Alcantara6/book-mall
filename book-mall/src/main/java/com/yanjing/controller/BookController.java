@@ -20,7 +20,7 @@ import javax.validation.constraints.Min;
  * @date 2021-01-20
  */
 @RestController
-@RequestMapping("api")
+@RequestMapping("mall")
 public class BookController {
     @Autowired
     private BookService bookService;

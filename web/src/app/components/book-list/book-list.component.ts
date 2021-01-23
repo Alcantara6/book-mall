@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { StandardResponse } from '@deepdraw/core';
+import { BookStatus } from 'src/app/constants/book.constant';
 import { Book } from 'src/app/models/book.model';
 import { Page } from 'src/app/models/response.model';
 import { BookService } from 'src/app/services/book.service';
+import { CartService } from 'src/app/services/cart.service';
 
 @Component({
 	selector: 'app-book-list',
@@ -10,6 +12,8 @@ import { BookService } from 'src/app/services/book.service';
 	styleUrls: ['./book-list.component.less'],
 })
 export class BookListComponent implements OnInit {
+	readonly bookStatus = BookStatus;
+
 	books: Book[] = [];
 	totalCount = 1;
 	pageNo = 1;
@@ -19,7 +23,10 @@ export class BookListComponent implements OnInit {
 	isShowModal = false;
 	modalTitle: string;
 
-	constructor(private bookService: BookService) {}
+	constructor(
+    private bookService: BookService,
+    private cartService: CartService,
+  ) {}
 
 	ngOnInit(): void {
 		this.getBooks();
@@ -77,4 +84,16 @@ export class BookListComponent implements OnInit {
 			this.getBooks();
 		});
 	}
+
+	toggleStatus(book: Book): void {
+		this.bookService.toggleBookStatus(book.id).subscribe(() => {
+			this.getBooks();
+		});
+  }
+
+  addToCart(book: Book): void {
+    this.cartService.addToCart(book.id).subscribe(() => {
+      this.getBooks();
+    });
+  }
 }
