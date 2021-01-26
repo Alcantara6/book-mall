@@ -12,23 +12,23 @@ public class Response<T> implements Serializable {
     private String message = "";
     private T body;
 
-    public Response(ResponseStatus responseStatus) {
+    Response(ResponseStatus responseStatus) {
         this.code = responseStatus.getCode();
         this.message = responseStatus.getMessage();
     }
 
-    public Response(ResponseStatus responseStatus, T body) {
+    Response(ResponseStatus responseStatus, T body) {
         this.code = responseStatus.getCode();
         this.message = responseStatus.getMessage();
         this.body = body;
     }
 
-    public Response(ResponseStatus responseStatus, String message) {
+    Response(ResponseStatus responseStatus, String message) {
         this.code = responseStatus.getCode();
         this.message = message;
     }
 
-    public Response(ResponseStatus responseStatus, String message, T body) {
+    Response(ResponseStatus responseStatus, String message, T body) {
         this.code = responseStatus.getCode();
         this.message = message;
         this.body = body;
