@@ -5,9 +5,11 @@ import com.yanjing.assistant.UserManager;
 import com.yanjing.entity.User;
 import com.yanjing.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
@@ -24,17 +26,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findByUserName(String username) {
+    public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
     @Override
     public User login(User user) {
-        User registeredUser = findByUserName(user.getUsername()).orElse(null);
-        // TODO: 是否还需检查null
-        if (registeredUser == null) {
-            return null;
-        }
+        User registeredUser = findByUsername(user.getUsername()).orElse(null);
         userManager.login(user);
         cartManager.initCart();
         return registeredUser;

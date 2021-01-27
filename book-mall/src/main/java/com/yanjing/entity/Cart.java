@@ -5,9 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Cart implements Serializable {
+    private User user;
     private List<CartItem> cartItems = new ArrayList<>();
 
     public Cart() {
+    }
+
+    public Cart(User user) {
+        this.user = user;
     }
 
     public CartItem findCartItemByBookId(Integer id) {

@@ -14,9 +14,15 @@ public class WebResolverConfig implements WebMvcConfigurer {
         return new CurrentCartMethodArgumentResolver();
     }
 
+    @Bean
+    public CurrentUserMethodArgumentResolver currentUserMethodArgumentResolver() {
+        return new CurrentUserMethodArgumentResolver();
+    }
+
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         argumentResolvers.add(currentCartMethodArgumentResolver());
+        argumentResolvers.add(currentUserMethodArgumentResolver());
         WebMvcConfigurer.super.addArgumentResolvers(argumentResolvers);
     }
 }

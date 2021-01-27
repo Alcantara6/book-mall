@@ -1,6 +1,7 @@
 package com.yanjing.assistant;
 
 import com.yanjing.entity.Cart;
+import com.yanjing.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,9 +14,13 @@ public class SessionCartManager implements CartManager {
     @Autowired
     private HttpSession session;
 
+    @Autowired
+    private UserManager userManager;
+
     @Override
     public void initCart() {
-        setAttribute(SESSION_CART, new Cart());
+        User currentUser = userManager.getCurrentUser();
+        setAttribute(SESSION_CART, new Cart(currentUser));
     }
 
     @Override
