@@ -8,7 +8,7 @@ import javax.servlet.http.HttpSession;
 
 @Component
 public class SessionCartManager implements CartManager {
-    private static String SESSION_CART = "cart";
+    private static final String SESSION_CART = "cart";
 
     @Autowired
     private HttpSession session;
