@@ -13,11 +13,15 @@ public final class ResponseUtils {
         return new Response<T>(ResponseStatus.OK, message);
     }
 
-    public static Response fail(ResponseStatus responseStatus) {
-        return new Response(responseStatus);
+    public static Response badRequest(String message) {
+        return new Response(ResponseStatus.BAD_REQUEST, message);
     }
 
-    public static Response fail(ResponseStatus responseStatus, String message) {
-        return new Response(responseStatus, message);
+    public static Response notFound(String message) {
+        return new Response(ResponseStatus.NOT_FOUND, message);
+    }
+
+    public static Response unAuthorized(String message) {
+        return new Response(ResponseStatus.UNAUTHORIZED, message);
     }
 }

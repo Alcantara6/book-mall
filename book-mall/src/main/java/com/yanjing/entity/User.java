@@ -23,6 +23,6 @@ public class User extends BaseEntity implements Serializable {
     @NotNull(message = "密码不能为空")
     private String password;
 
-    @Email
+    @Email(message = "邮箱格式错误")
     private String email;
 }

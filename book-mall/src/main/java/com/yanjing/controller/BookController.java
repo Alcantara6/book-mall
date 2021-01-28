@@ -5,7 +5,6 @@ import com.yanjing.exception.BookAddFailException;
 import com.yanjing.exception.BookNotFoundException;
 import com.yanjing.service.BookService;
 import com.yanjing.util.response.Response;
-import com.yanjing.util.response.ResponseStatus;
 import com.yanjing.util.response.ResponseUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +65,7 @@ public class BookController {
     public Response<Book> addBook(@Valid @RequestBody Book book) {
         Book addedBook = bookService.save(book).orElse(null);
         if (null == addedBook) {
-            return ResponseUtils.fail(ResponseStatus.BAD_REQUEST, "图书添加失败");
+            return ResponseUtils.badRequest("添加图书失败，ISBN重复");
         }
         return ResponseUtils.success(addedBook);
     }
@@ -81,9 +80,9 @@ public class BookController {
             if (null != updatedBook) {
                 return ResponseUtils.success(book);
             }
-            return ResponseUtils.fail(ResponseStatus.BAD_REQUEST, "更新图书失败");
+            return ResponseUtils.badRequest("更新图书失败");
         }
-        return ResponseUtils.fail(ResponseStatus.NOT_FOUND, "没有找到id为" + id + "的图书！");
+        return ResponseUtils.notFound("没有找到id为" + id + "的图书！");
     }
 
     @DeleteMapping("books/{id}")

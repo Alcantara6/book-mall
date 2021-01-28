@@ -1,7 +1,7 @@
 package com.yanjing.entity;
 
 import com.yanjing.constants.BookStatus;
-import lombok.Data;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -17,14 +17,13 @@ import java.util.Date;
  * @date 2021-01-20
  */
 @Entity
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "book")
-public class Book implements Serializable {
+public class Book extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
 
     @NotEmpty(message = "书名不能为空")
     private String name;

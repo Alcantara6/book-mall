@@ -3,7 +3,6 @@ package com.yanjing.controller;
 import com.yanjing.entity.Book;
 import com.yanjing.service.BookService;
 import com.yanjing.util.response.Response;
-import com.yanjing.util.response.ResponseStatus;
 import com.yanjing.util.response.ResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +26,6 @@ public class BookManageController {
             bookService.toggleStatus(book);
             return ResponseUtils.success(book);
         }
-        return ResponseUtils.fail(ResponseStatus.NOT_FOUND, "没有找到id为" + id + "的图书！");
+        return ResponseUtils.notFound("没有找到id为" + id + "的图书！");
     }
 }
