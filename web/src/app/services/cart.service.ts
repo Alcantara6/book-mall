@@ -3,15 +3,15 @@ import { Observable } from 'rxjs';
 import { BaseHttpService } from './base-http.service';
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root',
 })
 export class CartService {
 	private bookUrl = '/api';
 
-  constructor(private baseHttp: BaseHttpService) { }
+	constructor(private baseHttp: BaseHttpService) {}
 
-  addToCart(bookId: number): Observable<any> {
-    const url = `${this.bookUrl}/shopping/add/${bookId}`;
-    return this.baseHttp.get(url);
-  }
+	addToCart(bookId: number): Observable<any> {
+		const url = `${this.bookUrl}/cart/item`;
+		return this.baseHttp.post(url, { bookId });
+	}
 }
