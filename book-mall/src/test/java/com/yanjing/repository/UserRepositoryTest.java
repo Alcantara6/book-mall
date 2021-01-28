@@ -17,7 +17,7 @@ public class UserRepositoryTest {
 
     @Test
     public void findByUsername_shouldReturnNull_ifUserDoesNotExist() {
-        insertIntoTestUser("abc");
+        createUser("abc");
 
         User user = userRepository.findByUsername("def").orElse(null);
 
@@ -26,14 +26,14 @@ public class UserRepositoryTest {
 
     @Test
     public void findByUsername_happyPath() {
-        User createdUser = insertIntoTestUser("ghk");
+        User createdUser = createUser("ghk");
 
         User foundUser = userRepository.findByUsername("ghk").orElse(null);
 
         assertEquals(createdUser, foundUser);
     }
 
-    private User insertIntoTestUser(String username) {
+    private User createUser(String username) {
         User user = User.builder().username(username).password("123").build();
         userRepository.saveAndFlush(user);
         return user;

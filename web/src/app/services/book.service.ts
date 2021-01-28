@@ -24,7 +24,7 @@ export class BookService {
 
 	addBook(book: Book) {
 		const url = `${this.bookUrl}/mall/books`;
-		return this.baseHttp.post(url, book);
+		return this.baseHttp.postJson(url, book);
 	}
 
 	editBook(book: Book) {

@@ -14,7 +14,7 @@ public class CartController {
     private CartService cartService;
 
     @PostMapping("/item")
-    public CartItem addToCart(@RequestParam("bookId") Integer bookId, @CurrentCart Cart cart) {
+    public CartItem addToCart(@RequestParam Integer bookId, @CurrentCart Cart cart) {
         CartItem cartItem = cartService.createCartItem(bookId, 1);
         cart.updateCart(cartItem);
         return cartItem;

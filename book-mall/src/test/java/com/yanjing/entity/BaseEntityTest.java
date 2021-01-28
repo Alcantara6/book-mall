@@ -13,7 +13,8 @@ public class BaseEntityTest {
         @DisplayName("自反性")
         @Test
         public void equals_ifHaveReflexivity() {
-            BaseEntity baseEntity = createWithId(1);
+            // 直接通过无参构造，排除id相等满足的equal
+            BaseEntity baseEntity = new BaseEntity();
 
             assertEquals(baseEntity, baseEntity);
         }

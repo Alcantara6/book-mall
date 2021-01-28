@@ -3,15 +3,12 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class BaseHttpService {
-
-	constructor(
-		public http: HttpClient,
-	) { }
+	constructor(public http: HttpClient) {}
 
 	get(url: string, params: any = {}) {
 		const options = {
 			headers: this.getHttpOptions(),
-			params: new HttpParams({ fromObject: params })
+			params: new HttpParams({ fromObject: params }),
 		};
 		return this.http.get(url, options);
 	}
@@ -23,24 +20,30 @@ export class BaseHttpService {
 	getByJson(url: string, params: any = {}) {
 		return this.http.get(url, {
 			headers: new HttpHeaders({
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
 			}),
-			params
+			params,
 		});
 	}
 
 	delete(url: string, params: any = '') {
-
 		return this.http.delete(url, { headers: this.getHttpOptions(), params });
 	}
 
 	post(url: string, params?: any) {
-		return this.http.post(url, params, { headers: this.getHttpOptions() });
+		const reqParams = new HttpParams({ fromObject: params });
+		return this.http.post(url, reqParams, { headers: this.getHttpOptions() });
+	}
+
+	postParams(url: string, params: any = {}) {
+		const options = {
+			params: new HttpParams({ fromObject: params }),
+		};
+		return this.http.post(url, null, options);
 	}
 
 	postJson(url: string, params: any) {
-		const reqParams = new HttpParams({ fromObject: params });
-		return this.http.post(url, reqParams, { headers: this.getHttpOptions() });
+		return this.http.post(url, params, { headers: this.getHttpOptions() });
 	}
 
 	postByPath(url: string, params: any) {
@@ -48,12 +51,10 @@ export class BaseHttpService {
 	}
 
 	putByPath(url: string, params: any) {
-
 		return this.http.put(url, '', { headers: this.getHttpOptions(), params });
 	}
 
 	put(url: string, params: any) {
-
 		const reqParams = new HttpParams({ fromObject: params });
 		return this.http.put(url, reqParams, { headers: this.getHttpOptions() });
 	}
@@ -63,15 +64,13 @@ export class BaseHttpService {
 	}
 
 	postForRequestBody(url: string, params: any) {
-
 		return this.http.post(url, JSON.stringify(params), { headers: this.getHttpOptions() });
 	}
 
 	getHttpOptions() {
-
 		return new HttpHeaders({
 			key: '',
-			secret: ''
+			secret: '',
 		});
 	}
 }

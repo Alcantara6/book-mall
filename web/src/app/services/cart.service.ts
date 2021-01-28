@@ -12,6 +12,6 @@ export class CartService {
 
 	addToCart(bookId: number): Observable<any> {
 		const url = `${this.bookUrl}/cart/item`;
-		return this.baseHttp.post(url, { bookId });
+		return this.baseHttp.postParams(url, { bookId });
 	}
 }
