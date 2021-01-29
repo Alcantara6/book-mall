@@ -39,7 +39,7 @@ public class Cart implements Serializable {
     }
 
     // 函数名字可以是以下几种形式：动宾词组（动作）、名词（往往是属性）、形容词词组（往往是状态）
-    public Double getTotalPrice() {
+    public Double totalPrice() {
         return cartItems.stream().mapToDouble(CartItem :: subTotal).sum();
     }
 }

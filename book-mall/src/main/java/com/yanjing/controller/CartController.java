@@ -23,7 +23,7 @@ public class CartController {
     @GetMapping("/details")
     public Response<Map> getCartDetails(@CurrentCart Cart cart) {
         Map<String, Object> cartDetails = new HashMap<>();
-        cartDetails.put("totalPrice", cart.getTotalPrice());
+        cartDetails.put("totalPrice", cart.totalPrice());
         cartDetails.put("items", buildCartDetails(cart));
         return ResponseUtils.success(cartDetails);
     }
