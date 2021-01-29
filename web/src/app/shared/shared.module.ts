@@ -11,6 +11,6 @@ import {
 
 @NgModule({
 	declarations: [],
-	exports: [CommonModule, NzTableModule, NzFormModule, NzButtonModule, NzIconModule, NzMessageModule, NzModalModule],
+	exports: [CommonModule, NzButtonModule, NzIconModule, NzMessageModule, NzModalModule],
 })
 export class SharedModule {}

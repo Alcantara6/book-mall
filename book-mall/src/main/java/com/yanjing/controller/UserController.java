@@ -30,6 +30,15 @@ public class UserController {
             return ResponseUtils.badRequest("密码不正确");
         }
         userService.login(registeredUser);
-        return ResponseUtils.success(registeredUser);
+        return ResponseUtils.success(createUserInfo(registeredUser));
+    }
+
+    private User createUserInfo(User currentUser) {
+        User user = new User();
+        if (currentUser != null) {
+            user.setUsername(currentUser.getUsername());
+            user.setEmail(currentUser.getEmail());
+        }
+        return user;
     }
 }

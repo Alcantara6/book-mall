@@ -31,12 +31,12 @@ export class BaseHttpService {
 	}
 
 	post(url: string, params?: any) {
-		return this.http.post(url, params, { headers: this.getHttpOptions() });
+    const reqParams = new HttpParams({ fromObject: params });
+		return this.http.post(url, reqParams, { headers: this.getHttpOptions() });
 	}
 
 	postJson(url: string, params: any) {
-		const reqParams = new HttpParams({ fromObject: params });
-		return this.http.post(url, reqParams, { headers: this.getHttpOptions() });
+		return this.http.post(url, params, { headers: this.getHttpOptions() });
 	}
 
 	postByPath(url: string, params: any) {
