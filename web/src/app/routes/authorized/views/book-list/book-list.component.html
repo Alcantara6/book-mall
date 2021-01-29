@@ -17,8 +17,8 @@
 			<th>封面</th>
 			<th>书名</th>
 			<th>作者</th>
-      <th>ISBN</th>
-      <th>库存</th>
+			<th>ISBN</th>
+			<th>库存</th>
 			<th>出版时间</th>
 			<th>价格</th>
 			<th></th>
@@ -31,16 +31,16 @@
 			</td>
 			<td>{{ book.name }}</td>
 			<td>{{ book.author }}</td>
-      <td>{{ book.isbn }}</td>
-      <td>{{ book.stock }}</td>
+			<td>{{ book.isbn }}</td>
+			<td>{{ book.stock }}</td>
 			<td>{{ book.publishDate }}</td>
 			<td>{{ book.price }}</td>
 			<td>
-        <button nz-button nzType="primary" nzSize="small" (click)="toggleStatus(book)">
+				<button nz-button nzType="primary" nzSize="small" (click)="toggleStatus(book)">
 					<i nz-icon nzType="pushpin" nzTheme="outline"></i>
 					<span *ngIf="book.status === bookStatus.OFF_SHELVES">上架</span>
 					<span *ngIf="book.status === bookStatus.AVAILABLE">下架</span>
-        </button>
+				</button>
 				<button nz-button nzType="primary" nzSize="small" (click)="editBook(book)">
 					<i nz-icon nzType="edit"></i>
 					编辑
@@ -48,8 +48,8 @@
 				<button nz-button [nzType]="'default'" nzSize="small" (click)="deleteBook(book.id)">
 					<i nz-icon nzType="close"></i>
 					删除
-        </button>
-        <button nz-button [nzType]="'primary'" nzSize="small" (click)="addToCart(book)">
+				</button>
+				<button nz-button [nzType]="'primary'" nzSize="small" (click)="addToCart(book)">
 					<i nz-icon nzType="shopping-cart" nzTheme="outline"></i>
 					加入购物车
 				</button>

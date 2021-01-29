@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { BookStatus } from 'src/app/constants/book.constant';
-import { Book } from 'src/app/models/book.model';
+import { BookStatus } from '../../domain/constants/book.constant';
+import { Book } from '../../domain/models/book.model';
 
 @Component({
 	selector: 'app-book-edit',

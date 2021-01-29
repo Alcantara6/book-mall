@@ -1,16 +1,16 @@
-import { BookStatus } from "../constants/book.constant";
+import { BookStatus } from '../constants/book.constant';
 
 export interface Book {
 	id: number;
 	cover: string;
 	name: string;
 	author: string;
-  isbn: string;
-  stock: number;
+	isbn: string;
+	stock: number;
 	publishDate: string;
 	price: number;
-  bookAbstract: string;
-  status: BookStatus
+	bookAbstract: string;
+	status: BookStatus;
 }
 
 export interface BookRequestParams {

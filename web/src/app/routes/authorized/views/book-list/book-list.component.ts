@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { StandardResponse } from '@deepdraw/core';
-import { BookStatus } from 'src/app/constants/book.constant';
-import { Book } from 'src/app/models/book.model';
-import { Page } from 'src/app/models/response.model';
-import { BookService } from 'src/app/services/book.service';
-import { CartService } from 'src/app/services/cart.service';
+import { BookService } from 'src/app/routes/authorized/domain/services/book.service';
+import { CartService } from 'src/app/routes/authorized/domain/services/cart.service';
+import { BookStatus } from '../../domain/constants/book.constant';
+import { Book } from '../../domain/models/book.model';
+import { Page } from '../../domain/models/response.model';
 
 @Component({
 	selector: 'app-book-list',
@@ -23,10 +23,7 @@ export class BookListComponent implements OnInit {
 	isShowModal = false;
 	modalTitle: string;
 
-	constructor(
-    private bookService: BookService,
-    private cartService: CartService,
-  ) {}
+	constructor(private bookService: BookService, private cartService: CartService) {}
 
 	ngOnInit(): void {
 		this.getBooks();
@@ -89,11 +86,11 @@ export class BookListComponent implements OnInit {
 		this.bookService.toggleBookStatus(book.id).subscribe(() => {
 			this.getBooks();
 		});
-  }
+	}
 
-  addToCart(book: Book): void {
-    this.cartService.addToCart(book.id).subscribe(() => {
-      this.getBooks();
-    });
-  }
+	addToCart(book: Book): void {
+		this.cartService.addToCart(book.id).subscribe(() => {
+			this.getBooks();
+		});
+	}
 }
