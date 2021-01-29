@@ -1,5 +1,9 @@
 <div class="main-btns">
 	<button nz-button nzType="primary" nzSize="large" (click)="addBook()">添加</button>
+	<a [routerLink]="['../cart']" class="link-cart">
+		<i nz-icon nzType="shopping-cart" nzTheme="outline"></i>
+		我的购物车 <span class="cart-total-count">{{ cartDetails?.totalCount }}</span>
+	</a>
 </div>
 
 <nz-table

@@ -1,0 +1,49 @@
+<div class="settlement">
+	<span class="total-count">
+		已添加
+		<span>{{ cartDetails?.totalCount }}</span>
+	</span>
+	<span class="total-price">
+		总价格为
+		<span>{{ cartDetails?.totalPrice }}</span>
+	</span>
+</div>
+
+<nz-table
+	*ngIf="cartDetails?.items?.length; else none"
+	class="cart-table"
+	#cartTable
+	[nzData]="cartDetails.items"
+	[nzFrontPagination]="false"
+>
+	<thead>
+		<tr>
+			<th></th>
+			<th>书名</th>
+			<th>单价</th>
+			<th>数量</th>
+			<th>小计</th>
+			<th>操作</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr *ngFor="let cartItem of cartTable.data">
+			<td>
+				<img [src]="cartItem.book.cover" alt="暂无封面" />
+			</td>
+			<td>{{ cartItem.book.name }}</td>
+			<td>{{ cartItem.book.price | currency }}</td>
+			<td>{{ cartItem.quantity }}</td>
+			<td>{{ cartItem.subTotal }}</td>
+			<td>
+				<button nz-button [nzType]="'primary'" nzSize="small" (click)="deleteCartItem(cartItem)">
+					<i nz-icon nzType="delete" nzTheme="outline"></i>
+					删除
+				</button>
+			</td>
+		</tr>
+	</tbody>
+</nz-table>
+<ng-template #none>
+	<p>购物车空空如也</p>
+</ng-template>

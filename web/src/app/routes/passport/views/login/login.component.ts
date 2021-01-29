@@ -36,9 +36,9 @@ export class LoginComponent implements OnInit {
 	}
 
 	validateForm() {
-		for (const index of Object.keys(this.loginForm.controls)) {
-			this.loginForm.controls[index].markAsDirty;
-			this.loginForm.controls[index].updateValueAndValidity;
+		for (const key of Object.keys(this.loginForm.controls)) {
+			this.loginForm.controls[key].markAsDirty();
+			this.loginForm.controls[key].updateValueAndValidity();
 		}
 	}
 

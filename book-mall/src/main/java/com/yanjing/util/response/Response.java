@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class Response<T> implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private Integer code;
+    private String code;
     private String message = "";
     private T body;
 

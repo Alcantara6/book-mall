@@ -1,17 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { CartState } from './../../domain/states/cart.state';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { StandardResponse } from '@deepdraw/core';
 import { BookService } from 'src/app/routes/authorized/domain/services/book.service';
 import { CartService } from 'src/app/routes/authorized/domain/services/cart.service';
 import { BookStatus } from '../../domain/constants/book.constant';
 import { Book } from '../../domain/models/book.model';
 import { Page } from '../../domain/models/response.model';
+import { Subscription } from 'rxjs';
+import { CartDetails } from '../../domain/models/cart.model';
 
 @Component({
 	selector: 'app-book-list',
 	templateUrl: './book-list.component.html',
 	styleUrls: ['./book-list.component.less'],
 })
-export class BookListComponent implements OnInit {
+export class BookListComponent implements OnInit, OnDestroy {
 	readonly bookStatus = BookStatus;
 
 	books: Book[] = [];
@@ -23,16 +26,24 @@ export class BookListComponent implements OnInit {
 	isShowModal = false;
 	modalTitle: string;
 
-	constructor(private bookService: BookService, private cartService: CartService) {}
+	cartDetails: CartDetails;
+	cartDetailsSubscription: Subscription;
+
+	constructor(private bookService: BookService, private cartState: CartState) {}
 
 	ngOnInit(): void {
+		this.subscribeCartDetails();
 		this.getBooks();
+	}
+
+	ngOnDestroy(): void {
+		this.unSubscribeCartDetails();
 	}
 
 	getBooks(): void {
 		// pageNo后端从0开始
 		this.bookService.getBooks(this.pageNo - 1, this.pageSize).subscribe((response: StandardResponse<Page<Book>>) => {
-			const resBody = <Page<Book>>response.body();
+			const resBody =  response.body() as Page<Book>;
 			this.books = resBody.content;
 			this.totalCount = resBody.totalElements;
 		});
@@ -89,8 +100,16 @@ export class BookListComponent implements OnInit {
 	}
 
 	addToCart(book: Book): void {
-		this.cartService.addToCart(book.id).subscribe(() => {
-			this.getBooks();
+		this.cartState.addToCart(book);
+	}
+
+	subscribeCartDetails() {
+		this.cartDetailsSubscription = this.cartState.cartDetails$.subscribe((cartDetails) => {
+			this.cartDetails = cartDetails;
 		});
+	}
+
+	unSubscribeCartDetails() {
+		this.cartDetailsSubscription && this.cartDetailsSubscription.unsubscribe();
 	}
 }

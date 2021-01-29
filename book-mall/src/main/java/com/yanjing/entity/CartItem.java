@@ -22,11 +22,11 @@ public class CartItem {
         }
     }
 
-    Double getSubTotal() {
+    public Double subTotal() {
         return this.book.getPrice() * this.quantity;
     }
 
-    Integer getBookId() {
+    Integer bookId() {
         return this.book.getId();
     }
 }

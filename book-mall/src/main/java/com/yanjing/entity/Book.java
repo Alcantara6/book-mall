@@ -41,6 +41,9 @@ public class Book extends BaseEntity implements Serializable {
     @NotNull(message = "价格不能为空")
     private Double price;
 
+    @NotNull(message ="库存不能为空")
+    private Integer stock;
+
     private String cover;
 
     @Column(name = "book_abstract")

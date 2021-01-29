@@ -2,6 +2,7 @@ import { AuthorizedComponent } from './authorized.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { BookListComponent } from './views/book-list/book-list.component';
+import { CartComponent } from './views/cart/cart.component';
 
 const routes: Routes = [
 	{
@@ -15,6 +16,10 @@ const routes: Routes = [
 			{
 				path: 'books',
 				component: BookListComponent,
+			},
+			{
+				path: 'cart',
+				component: CartComponent,
 			},
 		],
 	},
