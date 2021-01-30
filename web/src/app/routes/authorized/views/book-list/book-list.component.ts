@@ -33,6 +33,7 @@ export class BookListComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.subscribeCartDetails();
+		this.cartState.getCartItems();
 		this.getBooks();
 	}
 
@@ -43,9 +44,11 @@ export class BookListComponent implements OnInit, OnDestroy {
 	getBooks(): void {
 		// pageNo后端从0开始
 		this.bookService.getBooks(this.pageNo - 1, this.pageSize).subscribe((response: StandardResponse<Page<Book>>) => {
-			const resBody =  response.body() as Page<Book>;
-			this.books = resBody.content;
-			this.totalCount = resBody.totalElements;
+			if (response.successful()) {
+				const resBody = response.body() as Page<Book>;
+				this.books = resBody.content;
+				this.totalCount = resBody.totalElements;
+			}
 		});
 	}
 

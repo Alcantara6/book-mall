@@ -3,7 +3,9 @@ import { BaseHttpService } from 'src/app/shared/services/base-http.service';
 import { PassportModule } from '../../passport.module';
 import { LoginFormParams } from '../models/passport.model';
 
-@Injectable()
+@Injectable({
+	providedIn: 'root',
+})
 export class PassportService {
 	private accountUrl = '/api';
 
@@ -12,5 +14,10 @@ export class PassportService {
 	login(formBody: LoginFormParams) {
 		const url = `${this.accountUrl}/user/login`;
 		return this.http.postJson(url, formBody);
+	}
+
+	getUserInfo() {
+		const url = `${this.accountUrl}/user/info`;
+		return this.http.get(url);
 	}
 }

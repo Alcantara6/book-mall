@@ -27,7 +27,7 @@ export class DefaultInterceptor implements HttpInterceptor {
 			switch (error.status) {
 				case 401:
 					this.messageService.warning('请先登录');
-					this.router.navigateByUrl('passport');
+					this.router.navigateByUrl('passport/login');
 					break;
 				case 403:
 					this.messageService.warning('无权查看');

@@ -1,14 +1,12 @@
 package com.yanjing.controller;
 
+import com.yanjing.annotation.CurrentUser;
 import com.yanjing.entity.User;
 import com.yanjing.service.UserService;
 import com.yanjing.util.response.Response;
 import com.yanjing.util.response.ResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("user")
@@ -31,6 +29,11 @@ public class UserController {
         }
         userService.login(registeredUser);
         return ResponseUtils.success(createUserInfo(registeredUser));
+    }
+
+    @GetMapping("info")
+    public Response<User> getUserInfo(@CurrentUser User user) {
+        return ResponseUtils.success(createUserInfo(user));
     }
 
     private User createUserInfo(User currentUser) {

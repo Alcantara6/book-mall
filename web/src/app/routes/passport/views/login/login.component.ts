@@ -1,3 +1,4 @@
+import { AuthorizationService } from './../../domain/services/authorization.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -19,6 +20,7 @@ export class LoginComponent implements OnInit {
 		private router: Router,
 		private message: NzMessageService,
 		private passportService: PassportService,
+		private authorizationService: AuthorizationService,
 	) {}
 
 	ngOnInit(): void {
@@ -45,7 +47,9 @@ export class LoginComponent implements OnInit {
 	requestLogin() {
 		this.passportService.login(this.loginForm.value).subscribe((response: StandardResponse<UserInfo>) => {
 			if (response.successful()) {
-				this.router.navigate(['/authorized']);
+				const { redirectUrl, redirectQueryParams } = this.authorizationService;
+				this.authorizationService.setAuthInfo(response.body() as UserInfo);
+				this.router.navigate([redirectUrl || ''], { queryParams: redirectQueryParams });
 			} else {
 				this.message.error('登录失败！');
 			}
