@@ -10,7 +10,7 @@ import lombok.*;
 // TODO: 购物车写进数据库
 public class CartItem {
     private Book book;
-    private Integer quantity;
+    private Integer quantity = 0;
 
     void increaseQuantity() {
         this.quantity += 1;

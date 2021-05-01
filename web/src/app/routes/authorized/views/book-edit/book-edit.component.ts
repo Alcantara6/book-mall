@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BookStatus } from '../../domain/constants/book.constant';
 import { Book } from '../../domain/models/book.model';
 
@@ -32,16 +32,18 @@ export class BookEditComponent implements OnInit, OnChanges {
 	}
 
 	createForm() {
-		const { id, name, author, bookAbstract, isbn, stock, price, publishDate, status } = this.book || {};
+		const { id, cover, name, author, bookAbstract, isbn, stock, price, publishDate, status } = this.book || {};
 		this.bookForm = this.formBuilder.group({
 			id: [id || null, []],
-			name: [name || '', []],
-			author: [author || '', []],
-			bookAbstract: [bookAbstract || '', []],
-			isbn: [isbn || '', []],
-			stock: [stock || null, []],
-			price: [price || null, []],
-			publishDate: [publishDate || null, []],
+			cover: [cover || '', []],
+			name: [name || '', [Validators.required]],
+			author: [author || '', [Validators.required]],
+			bookAbstract: [bookAbstract || '', [Validators.required]],
+			isbn: [isbn || '', [Validators.required]],
+			stock: [stock || null, [Validators.required]],
+			price: [price || null, [Validators.required]],
+			// publishDate最好用date-fns格式化为YYYY-MM-dd格式
+			publishDate: [publishDate || null, [Validators.required]],
 			status: [status || BookStatus.AVAILABLE, []],
 		});
 	}

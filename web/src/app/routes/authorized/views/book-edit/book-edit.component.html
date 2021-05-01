@@ -6,7 +6,14 @@
 	[nzOkLoading]="isOkLoading"
 	[nzFooter]="null"
 >
-	<form class="book-form" nz-form [formGroup]="bookForm" (ngSubmit)="submitForm()">
+	<form class="book-form" nz-form [formGroup]="bookForm">
+		<nz-form-item>
+			<nz-form-label [nzSpan]="7">封面</nz-form-label>
+			<nz-form-control [nzSpan]="12">
+				<input nz-input formControlName="cover" placeholder="请输入封面图片链接" />
+			</nz-form-control>
+		</nz-form-item>
+
 		<nz-form-item>
 			<nz-form-label [nzSpan]="7" nzRequired>书名</nz-form-label>
 			<nz-form-control [nzSpan]="12">
@@ -45,7 +52,7 @@
 		<nz-form-item>
 			<nz-form-label [nzSpan]="7" nzRequired>出版时间</nz-form-label>
 			<nz-form-control [nzSpan]="12">
-				<input nz-input formControlName="publishDate" placeholder="请输入出版时间" />
+				<nz-date-picker formControlName="publishDate" placeholder="请输入出版时间"></nz-date-picker>
 			</nz-form-control>
 		</nz-form-item>
 
@@ -58,8 +65,8 @@
 
 		<nz-form-item>
 			<nz-form-control [nzOffset]="7" [nzSpan]="12">
-				<button nz-button nzType="primary" [disabled]="!bookForm.valid">提交</button>
-				<button nz-button (click)="resetForm()">重置</button>
+				<button nz-button nzType="primary" [disabled]="!bookForm.valid" (click)="submitForm()">提交</button>
+				<button *ngIf="!book" nz-button (click)="resetForm()">重置</button>
 			</nz-form-control>
 		</nz-form-item>
 	</form>

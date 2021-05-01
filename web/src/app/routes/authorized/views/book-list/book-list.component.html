@@ -31,7 +31,7 @@
 	<tbody>
 		<tr *ngFor="let book of booksTable.data">
 			<td>
-				<img [src]="book.cover" alt="暂无封面" />
+				<img class="book-cover-img" [src]="book.cover" alt="暂无封面" />
 			</td>
 			<td>{{ book.name }}</td>
 			<td>{{ book.author }}</td>

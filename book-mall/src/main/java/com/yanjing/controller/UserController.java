@@ -37,6 +37,7 @@ public class UserController {
         return ResponseUtils.success(createUserInfo(registeredUser));
     }
 
+    // 如果sessionUser已过期，会被拦截器拦截，这里返回的肯定是有效的user
     @GetMapping("info")
     public Response<User> getUserInfo(@CurrentUser User user) {
         return ResponseUtils.success(createUserInfo(user));

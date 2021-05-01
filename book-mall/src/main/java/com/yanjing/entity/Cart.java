@@ -42,4 +42,8 @@ public class Cart implements Serializable {
     public Double totalPrice() {
         return cartItems.stream().mapToDouble(CartItem :: subTotal).sum();
     }
+
+    public Integer totalCount() {
+        return cartItems.stream().mapToInt(CartItem :: getQuantity).sum();
+    }
 }

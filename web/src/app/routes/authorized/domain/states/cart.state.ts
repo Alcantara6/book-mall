@@ -31,15 +31,7 @@ export class CartState {
 
 	private onHandlerUpdateCartDetails(response: StandardResponse<CartDetails>) {
 		if (response.successful()) {
-			const details = response.body() as CartDetails;
-			this.cartDetails$.next({
-				...details,
-				totalCount: this.totalCounts(details),
-			});
+			this.cartDetails$.next(response.body() as CartDetails);
 		}
-	}
-
-	private totalCounts(details: CartDetails) {
-		return details.items.length ? details.items.reduce((prev, curr) => prev + curr.quantity, 0) : 0;
 	}
 }

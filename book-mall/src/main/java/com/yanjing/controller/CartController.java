@@ -24,6 +24,7 @@ public class CartController {
     public Response<Map> getCartDetails(@CurrentCart Cart cart) {
         Map<String, Object> cartDetails = new HashMap<>();
         cartDetails.put("totalPrice", cart.totalPrice());
+        cartDetails.put("totalCount", cart.totalCount());
         cartDetails.put("items", buildCartDetails(cart));
         return ResponseUtils.success(cartDetails);
     }
