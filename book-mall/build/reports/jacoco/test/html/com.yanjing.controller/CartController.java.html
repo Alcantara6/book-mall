@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CartController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">book-mall</a> &gt; <a href="index.source.html" class="el_package">com.yanjing.controller</a> &gt; <span class="el_source">CartController.java</span></div><h1>CartController.java</h1><pre class="source lang-java linenums">package com.yanjing.controller;
+
+import com.yanjing.annotation.CurrentCart;
+import com.yanjing.entity.Cart;
+import com.yanjing.entity.CartItem;
+import com.yanjing.service.CartService;
+import com.yanjing.util.response.Response;
+import com.yanjing.util.response.ResponseUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+@RestController
+@RequestMapping(&quot;cart&quot;)
+<span class="nc" id="L19">public class CartController {</span>
+    @Autowired
+    private CartService cartService;
+
+    @GetMapping(&quot;/details&quot;)
+    public Response&lt;Map&gt; getCartDetails(@CurrentCart Cart cart) {
+<span class="nc" id="L25">        Map&lt;String, Object&gt; cartDetails = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L26">        cartDetails.put(&quot;totalPrice&quot;, cart.totalPrice());</span>
+<span class="nc" id="L27">        cartDetails.put(&quot;totalCount&quot;, cart.totalCount());</span>
+<span class="nc" id="L28">        cartDetails.put(&quot;items&quot;, buildCartDetails(cart));</span>
+<span class="nc" id="L29">        return ResponseUtils.success(cartDetails);</span>
+    }
+
+    @PostMapping(&quot;/item&quot;)
+    public Response&lt;Map&gt; addToCart(@RequestParam Integer bookId, @CurrentCart Cart cart) {
+<span class="nc" id="L34">        CartItem cartItem = cartService.createCartItem(bookId, 1);</span>
+<span class="nc" id="L35">        cart.updateCart(cartItem);</span>
+<span class="nc" id="L36">        return this.getCartDetails(cart);</span>
+    }
+
+    @DeleteMapping(&quot;item&quot;)
+    public Response&lt;Map&gt; deleteCartItem(@RequestParam Integer bookId, @CurrentCart Cart cart) {
+<span class="nc" id="L41">        Cart updatedCart = cartService.deleteCartItem(bookId, cart);</span>
+<span class="nc" id="L42">        return this.getCartDetails(updatedCart);</span>
+    }
+
+    private Object[] buildCartDetails(Cart cart) {
+<span class="nc" id="L46">        return cart.getCartItems().stream().map(cartItem -&gt; {</span>
+<span class="nc" id="L47">            Map&lt;String, Object&gt; cartItemDetail = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L48">            cartItemDetail.put(&quot;book&quot;, cartItem.getBook());</span>
+<span class="nc" id="L49">            cartItemDetail.put(&quot;quantity&quot;, cartItem.getQuantity());</span>
+<span class="nc" id="L50">            cartItemDetail.put(&quot;subTotal&quot;, cartItem.subTotal());</span>
+<span class="nc" id="L51">            return cartItemDetail;</span>
+<span class="nc" id="L52">        }).toArray();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

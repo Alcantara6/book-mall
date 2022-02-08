@@ -1,0 +1,17 @@
+com/yanjing/entity/BaseEntityTest.java
+ com.yanjing.entity.BaseEntityTest
+ com.yanjing.entity.BaseEntityTest$EqualsAttribute
+ com.yanjing.entity.BaseEntityTest$EqualsMethod
+ com.yanjing.entity.BaseEntityTest$hashCode
+com/yanjing/BookMallApplicationTests.java
+ com.yanjing.BookMallApplicationTests
+com/yanjing/entity/UserTest.java
+ com.yanjing.entity.UserTest
+ com.yanjing.entity.UserTest$UserEmailTest
+ com.yanjing.entity.UserTest$UserIdTest
+ com.yanjing.entity.UserTest$UserPasswordTest
+ com.yanjing.entity.UserTest$UsernameTest
+com/yanjing/repository/UserRepositoryTest.java
+ com.yanjing.repository.UserRepositoryTest
+com/yanjing/repository/ReadWriteMysqlByJDBCTest.java
+ com.yanjing.repository.ReadWriteMysqlByJDBCTest

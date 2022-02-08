@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReadWriteMysqlByJDBC.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">book-mall</a> &gt; <a href="index.source.html" class="el_package">com.yanjing.repository</a> &gt; <span class="el_source">ReadWriteMysqlByJDBC.java</span></div><h1>ReadWriteMysqlByJDBC.java</h1><pre class="source lang-java linenums">package com.yanjing.repository;
+
+import com.yanjing.entity.User;
+import org.apache.flink.api.common.functions.RichMapFunction;
+import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
+import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.api.java.typeutils.RowTypeInfo;
+import org.apache.flink.api.java.utils.ParameterTool;
+import org.apache.flink.connector.jdbc.JdbcInputFormat;
+import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.table.api.EnvironmentSettings;
+import org.apache.flink.table.api.Table;
+import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
+import org.apache.flink.types.Row;
+import org.apache.flink.util.FileUtils;
+import org.springframework.util.ResourceUtils;
+
+import java.io.File;
+import java.io.IOException;
+
+/**
+ * @author yanjing
+ * @date 2021/6/27
+ */
+<span class="nc" id="L27">public class ReadWriteMysqlByJDBC {</span>
+
+
+    public static DataStream&lt;User&gt; readFromDb() throws IOException {
+
+<span class="fc" id="L32">        final StreamExecutionEnvironment streamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment();</span>
+<span class="fc" id="L33">        final ParameterTool parameterTool = ParameterTool.fromPropertiesFile(&quot;flink.properties&quot;);</span>
+
+        // 1. 定义Field类型
+<span class="fc" id="L36">        TypeInformation[] fieldTypes = new TypeInformation[]{</span>
+
+                BasicTypeInfo.INT_TYPE_INFO,
+                BasicTypeInfo.STRING_TYPE_INFO,
+                BasicTypeInfo.STRING_TYPE_INFO,
+                BasicTypeInfo.STRING_TYPE_INFO
+        };
+        // 2.定义FieldNames
+<span class="fc" id="L44">        String[] fieldNames = new String[]{&quot;id&quot;, &quot;username&quot;, &quot;password&quot;, &quot;email&quot;};</span>
+        // 3.定义Row类型
+<span class="fc" id="L46">        RowTypeInfo rowTypeInfo = new RowTypeInfo(fieldTypes, fieldNames);</span>
+
+        // 4.定义JDBCInputFormat
+        JdbcInputFormat jdbcInputFormat = JdbcInputFormat
+<span class="fc" id="L50">                .buildJdbcInputFormat()</span>
+<span class="fc" id="L51">                .setDrivername(&quot;com.mysql.jdbc.Driver&quot;)</span>
+<span class="fc" id="L52">                .setDBUrl(parameterTool.get(&quot;mysql-jdbc-url&quot;))</span>
+<span class="fc" id="L53">                .setUsername(parameterTool.get(&quot;mysql-jdbc-username&quot;))</span>
+<span class="fc" id="L54">                .setPassword(parameterTool.get(&quot;mysql-jdbc-password&quot;))</span>
+<span class="fc" id="L55">                .setQuery(&quot;select id, username, password, email from user&quot;)</span>
+<span class="fc" id="L56">                .setRowTypeInfo(rowTypeInfo)</span>
+<span class="fc" id="L57">                .finish();</span>
+
+        // 5.以JDBCInputFormat形式读取MySQL DB数据
+<span class="fc" id="L60">        DataStreamSource&lt;Row&gt; dataStreamSourceRow = streamExecutionEnvironment.createInput(jdbcInputFormat);</span>
+
+        // 6. 阶段性验证可以正确读取
+<span class="fc" id="L63">        dataStreamSourceRow.print();</span>
+
+        // 7.将Row类型Stream转化为Entity类型
+<span class="fc" id="L66">        DataStream&lt;User&gt; dataStream = dataStreamSourceRow.map(new RichMapFunction&lt;Row, User&gt;() {</span>
+            @Override
+            public User map(Row row) throws Exception {
+
+<span class="nc" id="L70">                User user = new User();</span>
+<span class="nc" id="L71">                user.setId((Integer) row.getField(0));</span>
+<span class="nc" id="L72">                user.setUsername((String) row.getField(1));</span>
+<span class="nc" id="L73">                user.setPassword((String) row.getField(2));</span>
+<span class="nc" id="L74">                user.setEmail((String) row.getField(3));</span>
+<span class="nc" id="L75">                return user;</span>
+            }
+        });
+
+<span class="fc" id="L79">        System.out.println(&quot;read datasource end&quot;);</span>
+<span class="fc" id="L80">        return dataStream;</span>
+    }
+
+    public static void writeToDb() throws Exception {
+
+<span class="fc" id="L85">        final StreamExecutionEnvironment streamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment();</span>
+
+        // 1.添加数据源
+        // DataStream&lt;User&gt; userDataStream = env.addSource(new JdbcReader2());
+<span class="fc" id="L89">        DataStream&lt;User&gt; userDataStream = ReadWriteMysqlByJDBC.readFromDb();</span>
+
+<span class="fc" id="L91">        EnvironmentSettings settings = EnvironmentSettings.newInstance()</span>
+<span class="fc" id="L92">                .useBlinkPlanner()</span>
+<span class="fc" id="L93">                .inStreamingMode()</span>
+<span class="fc" id="L94">                .build();</span>
+<span class="fc" id="L95">        StreamTableEnvironment streamTableEnvironment = StreamTableEnvironment.create(streamExecutionEnvironment, settings);</span>
+
+        // 2.从DataStream获取数据
+<span class="fc" id="L98">        Table table = streamTableEnvironment.fromDataStream(userDataStream);</span>
+<span class="fc" id="L99">        streamTableEnvironment.createTemporaryView(&quot;temp_table&quot;, table);</span>
+
+        // 3. 创建sink内部Table
+<span class="fc" id="L102">        File destSqlFile = ResourceUtils.getFile(&quot;classpath:destination.sql&quot;);</span>
+<span class="fc" id="L103">        String destSql = FileUtils.readFileUtf8(destSqlFile);</span>
+<span class="fc" id="L104">        streamTableEnvironment.executeSql(destSql);</span>
+
+        // 4. 将内部Table插入到outer system
+<span class="fc" id="L107">        File insertSqlFile = ResourceUtils.getFile(&quot;classpath:insert.sql&quot;);</span>
+<span class="fc" id="L108">        String insertSql = FileUtils.readFileUtf8(insertSqlFile);</span>
+<span class="fc" id="L109">        streamTableEnvironment.executeSql(insertSql);</span>
+<span class="fc" id="L110">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

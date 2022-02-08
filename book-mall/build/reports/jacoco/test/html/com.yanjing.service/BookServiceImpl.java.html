@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BookServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">book-mall</a> &gt; <a href="index.source.html" class="el_package">com.yanjing.service</a> &gt; <span class="el_source">BookServiceImpl.java</span></div><h1>BookServiceImpl.java</h1><pre class="source lang-java linenums">package com.yanjing.service;
+
+import com.yanjing.constants.BookStatus;
+import com.yanjing.entity.Book;
+import com.yanjing.repository.BookRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+import java.util.Optional;
+
+/**
+ * @author yanjing
+ * @date 2021-01-21
+ */
+@Service
+<span class="nc" id="L19">public class BookServiceImpl implements BookService {</span>
+    @Autowired
+    private BookRepository bookRepository;
+
+    @Override
+    public Page&lt;Book&gt; findAllByPage(Integer pageNo, Integer pageSize) {
+<span class="nc" id="L25">        Sort sort = Sort.by(Sort.Direction.DESC, &quot;id&quot;);</span>
+<span class="nc" id="L26">        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);</span>
+<span class="nc" id="L27">        return bookRepository.findAll(pageable);</span>
+    }
+
+    @Override
+    public Optional&lt;Book&gt; findById(Integer id) {
+<span class="nc" id="L32">        return bookRepository.findById(id);</span>
+    }
+
+    @Override
+    public Optional&lt;Book&gt; findByIsbn(String isbn) {
+<span class="nc" id="L37">        return bookRepository.findByIsbn(isbn);</span>
+    }
+
+    @Override
+    public Page&lt;Book&gt; findAllByName(String name, Integer pageNo, Integer pageSize) {
+<span class="nc" id="L42">        Sort sort = Sort.by(Sort.Direction.DESC, &quot;name&quot;);</span>
+<span class="nc" id="L43">        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);</span>
+<span class="nc" id="L44">        return bookRepository.findAllByNameLike('%' + name + '%', pageable);</span>
+    }
+
+    @Override
+    public Page&lt;Book&gt; findAllByIsbn(String isbn, Integer pageNo, Integer pageSize) {
+<span class="nc" id="L49">        Sort sort = Sort.by(Sort.Direction.DESC, &quot;isbn&quot;);</span>
+<span class="nc" id="L50">        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);</span>
+<span class="nc" id="L51">        return bookRepository.findAllByIsbn(isbn, pageable);</span>
+    }
+
+    @Override
+    public Optional&lt;Book&gt; save(Book book) {
+<span class="nc" id="L56">        Book sameIsbnBook = findByIsbn(book.getIsbn()).orElse(null);</span>
+<span class="nc bnc" id="L57" title="All 4 branches missed.">        if (sameIsbnBook == null || sameIsbnBook.getId() == book.getId()) {</span>
+<span class="nc" id="L58">            return Optional.of(bookRepository.saveAndFlush(book));</span>
+        }
+<span class="nc" id="L60">        return Optional.empty();</span>
+    }
+
+    @Override
+    public void toggleStatus(Book book) {
+<span class="nc bnc" id="L65" title="All 2 branches missed.">        if (null != book) {</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">            BookStatus toggledStatus = book.getStatus() == BookStatus.AVAILABLE ? BookStatus.OFF_SHELVES : BookStatus.AVAILABLE;</span>
+<span class="nc" id="L67">            book.setStatus(toggledStatus);</span>
+<span class="nc" id="L68">            bookRepository.saveAndFlush(book);</span>
+        }
+<span class="nc" id="L70">    }</span>
+
+    @Override
+    public void removeById(Integer id) {
+<span class="nc" id="L74">        bookRepository.deleteById(id);</span>
+<span class="nc" id="L75">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
