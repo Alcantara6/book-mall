@@ -1,5 +1,6 @@
 package com.yanjing.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.GeneratedValue;
@@ -13,6 +14,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @MappedSuperclass
+@JsonIgnoreProperties({"handler", "hibernateLazyInitializer"})
 public class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
